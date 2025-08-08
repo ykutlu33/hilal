@@ -1,167 +1,93 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beni Seviyor Musun?</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Sana Özel Quiz Oluştur</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+        body { background-color: #f0f2f5; font-family: 'Varela Round', sans-serif; display: flex; justify-content: center; padding: 40px;}
+        .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 600px; width: 100%;}
+        h1 { text-align: center; color: #1877f2; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        input[type="text"], input[type="date"], input[type="email"] { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ddd; box-sizing: border-box;}
+        .options-container .option { display: flex; align-items: center; margin-bottom: 10px; }
+        .options-container .option input[type="text"] { flex-grow: 1; margin-right: 10px;}
+        .button { background-color: #1877f2; color: white; border: none; padding: 15px; width: 100%; font-size: 1.2rem; border-radius: 6px; cursor: pointer; transition: background-color 0.3s; }
+        .button:hover { background-color: #166fe5; }
+        #link-sonuc { margin-top: 20px; padding: 15px; background-color: #e7f3ff; border: 1px solid #1877f2; border-radius: 6px; text-align: center; display: none; }
+        #link-sonuc a { color: #1877f2; font-weight: bold; word-wrap: break-word; }
+    </style>
 </head>
 <body>
-    <form id="noNotificationForm" action="https://formsubmit.co/ysf.kutlu33@gmail.com" method="POST" style="display:none;">
-        <input type="hidden" name="uyari" value="Birisi 'Hayır' butonuna tıkladı!">
-        <input type="hidden" name="_subject" value="Eyvah! 'Hayır' Yanıtı Aldın!">
-        <input type="hidden" name="_captcha" value="false">
-    </form>
-    <form id="yesNotificationForm" action="https://formsubmit.co/ysf.kutlu33@gmail.com" method="POST" style="display:none;">
-        <input type="hidden" name="bildirim" value="Büyük haber! Birisi 'Evet' butonuna tıkladı!">
-        <input type="hidden" name="_subject" value="Harika! 'Evet' Yanıtı Aldın!">
-        <input type="hidden" name="_captcha" value="false">
-    </form>
-
-    <h1 id="question" style="animation: 1s ease-out 0s 1 normal forwards running fadeIn;">Beni Seviyor Musun?</h1>
-    <img src="1.gif" alt="Sevgi Gif" class="gif">
-    <div class="buttons">
-        <button class="yes" onclick="showLove()">Evet</button>
-        <button class="no" ontouchstart="moveNo(this, event)" onmouseover="moveNo(this, event)">Hayır</button>
-    </div>
-    <div class="hearts" id="hearts"></div>
-    <div class="message" id="message">
-        <span style="background-color: rgba(255, 255, 255, 0.8); border-radius: 20px;">Ben de seni seviyorummm</span> 
-        <span class="heart-beat">❤️</span>
-        <br>
-        <img src="2.gif" alt="Daha çok sevgi" class="gif" style="width: 350px;">
-    </div>
-
-    <script>
-        let noButtonNotificationSent = false;
-
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                document.getElementById('question').style.animation = 'fadeIn 1s ease-out forwards';
-            }, 500);
-        });
-
-        function moveNo(btn, event) {
-            if (event) {
-                event.preventDefault();
-            }
-            if (!noButtonNotificationSent) {
-                const form = document.getElementById('noNotificationForm');
-                const formData = new FormData(form);
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                }).catch(error => console.error('Hata:', error));
-                noButtonNotificationSent = true; 
-            }
-            const buttonsContainer = btn.parentElement;
-            const containerRect = buttonsContainer.getBoundingClientRect();
-            const btnRect = btn.getBoundingClientRect();
-            const btnWidth = btnRect.width;
-            const btnHeight = btnRect.height;
-            const maxX = window.innerWidth - btnWidth;
-            const maxY = window.innerHeight - btnHeight;
-            const margin = 10;
-            let x, y, attempts = 0;
-            const maxAttempts = 50;
-            do {
-                x = margin + Math.random() * (maxX - 2 * margin);
-                y = margin + Math.random() * (maxY - 2 * margin);
-                attempts++;
-                if (attempts > maxAttempts) { return; }
-            } while (
-                (Math.abs(x - (containerRect.left + containerRect.width / 2)) < 150 &&
-                 Math.abs(y - (containerRect.top + containerRect.height / 2)) < 80)
-            );
-            btn.style.left = (x - containerRect.left) + 'px';
-            btn.style.top = (y - containerRect.top) + 'px';
-            btn.style.position = 'absolute';
-            btn.style.right = 'auto';
-            btn.style.bottom = 'auto';
-            btn.style.backgroundColor = getRandomColor();
-        }
-
-        function showLove() {
-            const form = document.getElementById('yesNotificationForm');
-            const formData = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            }).catch(error => console.error('Hata:', error));
-            
-            document.getElementById('question').style.display = 'none';
-            document.querySelector('.buttons').style.display = 'none';
-            document.querySelector('.gif').style.display = 'none';
-            const message = document.getElementById('message');
-            message.style.display = 'block';
-            message.style.animation = 'fadeIn 1s ease-out forwards, pulse 2s ease-in-out infinite, wave 4s ease-in-out infinite';
-            startHeartAnimation();
-        }
+    <div class="form-container">
+        <h1>Sevgiline Özel Quiz Hazırla</h1>
         
-        function getRandomColor() {
-            const colors = ['#0061FC', '#f71111', '#8a017e', '#11626b', '#FFC300'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-        function startHeartAnimation() {
-            const interval = setInterval(createHearts, 200);
-            setTimeout(() => { clearInterval(interval); }, 30000);
-        }
-        function createHearts() {
-            const heartsContainer = document.getElementById('hearts');
-            const heartCount = 20;
-            for (let i = 0; i < heartCount; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.top = (Math.random() * 100 + 10) + 'vh';
-                const size = Math.random() * 30 + 20;
-                heart.style.fontSize = size + 'px';
-                const duration = Math.random() * 3 + 3;
-                heart.style.animationDuration = duration + 's';
-                heart.style.animationDelay = Math.random() + 's';
-                const hearts = ['❤️‍🔥', '💖', '💗', '💓', '💛','💚','💙'];
-                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
-                heartsContainer.appendChild(heart);
-                setTimeout(() => { heart.remove(); }, duration * 1000);
-            }
-        }
-    </script>
+        <div class="input-group">
+            <label for="creator_email">Cevapların Gönderileceği E-posta Adresin</label>
+            <input type="email" id="creator_email" placeholder="E-posta adresini buraya yaz..." required>
+        </div>
+
+        <div class="input-group">
+            <label for="soru1_cevap">Soru 1: İlk buluşma tarihinizi seçin (Doğru Cevap)</label>
+            <input type="date" id="soru1_cevap" required>
+        </div>
+
+        <div class="input-group">
+            <label for="soru2_metin">Soru 2: İkinci soruyu yazın (Örn: O gün üstümde ne vardı?)</label>
+            <input type="text" id="soru2_metin" placeholder="Soruyu buraya yazın..." required>
+        </div>
+
+        <div class="input-group">
+            <label>Soru 2'nin Cevap Seçenekleri (Birini doğru cevap olarak işaretleyin)</label>
+            <div class="options-container">
+                <div class="option"><input type="radio" name="dogru_secenek" value="0" checked> <input type="text" id="secenek1" placeholder="Seçenek 1" required></div>
+                <div class="option"><input type="radio" name="dogru_secenek" value="1"> <input type="text" id="secenek2" placeholder="Seçenek 2" required></div>
+                <div class="option"><input type="radio" name="dogru_secenek" value="2"> <input type="text" id="secenek3" placeholder="Seçenek 3" required></div>
+                <div class="option"><input type="radio" name="dogru_secenek" value="3"> <input type="text" id="secenek4" placeholder="Seçenek 4" required></div>
+            </div>
+        </div>
+
+        <button class="button" onclick="linkOlustur()">Quiz Linkini Oluştur</button>
+
+        <div id="link-sonuc">
+            <p>Harika! İşte sevgiline göndereceğin link. Kopyalayıp ona gönder:</p>
+            <a href="#" id="olusturulan-link" target="_blank"></a>
+        </div>
+    </div>
+
     <script>
-        // Sağ tık, F12 engelleme kodları
-        document.addEventListener('keydown', function (e) {
-            if (e.ctrlKey && e.key.toLowerCase() === 'u') {
-                e.preventDefault()
-                alert('Hile yapmak yok!')
+        function linkOlustur() {
+            const quizVerisi = {
+                creator_email: document.getElementById('creator_email').value,
+                soru1_cevap: document.getElementById('soru1_cevap').value,
+                soru2_metin: document.getElementById('soru2_metin').value,
+                secenekler: [
+                    document.getElementById('secenek1').value,
+                    document.getElementById('secenek2').value,
+                    document.getElementById('secenek3').value,
+                    document.getElementById('secenek4').value,
+                ],
+                soru2_dogru_index: document.querySelector('input[name="dogru_secenek"]:checked').value
+            };
+
+            if (!quizVerisi.creator_email || !quizVerisi.soru1_cevap || !quizVerisi.soru2_metin || quizVerisi.secenekler.some(s => s === '')) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
             }
-        })
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault()
-            alert('Sağ tık kapalı, hile yapma!')
-        })
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Tab') {
-                e.preventDefault()
-                for (let i = 0; i < 60; i++) {
-                    const div = document.createElement('div')
-                    div.textContent = 'Hile yapmak yok!'
-                    div.style.position = 'fixed'
-                    div.style.top = Math.random() * 90 + '%'
-                    div.style.left = Math.random() * 90 + '%'
-                    div.style.color = 'red'
-                    div.style.fontSize = '24px'
-                    div.style.fontWeight = 'bold'
-                    div.style.zIndex = 9999
-                    div.style.pointerEvents = 'none'
-                    document.body.appendChild(div)
-                    setTimeout(() => div.remove(), 1500)
-                }
-            } else if (e.key === 'F12') {
-                e.preventDefault()
-                alert('F12 ile geliştirici araçlarını açamazsın!')
-            }
-        })
+
+            const veriStr = JSON.stringify(quizVerisi);
+            const sifreliVeri = encodeURIComponent(veriStr);
+            
+            const anaAdres = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+            const quizLinki = anaAdres + 'quiz.html#' + sifreliVeri;
+
+            const linkAlani = document.getElementById('olusturulan-link');
+            linkAlani.href = quizLinki;
+            linkAlani.textContent = quizLinki;
+            document.getElementById('link-sonuc').style.display = 'block';
+        }
     </script>
 </body>
 </html>
