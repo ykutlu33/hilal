@@ -20,7 +20,7 @@
     <img src="1.gif" alt="Sevgi Gif" class="gif">
     <div class="buttons">
         <button class="yes" onclick="showLove()">Evet</button>
-        <button class="no" ontouchstart="moveNo(this)" onmouseover="moveNo(this)">Hayır</button>
+        <button class="no" ontouchstart="moveNo(this, event)" onmouseover="moveNo(this, event)">Hayır</button>
     </div>
     <div class="hearts" id="hearts"></div>
     <div class="message" id="message">
@@ -31,10 +31,8 @@
     </div>
 
     <script>
-        // --- YENİ EKLENEN SPAM KORUMA BAYRAKLARI ---
         let noButtonNotificationSent = false;
         let yesButtonNotificationSent = false;
-        // --- BİTTİ ---
 
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
@@ -42,8 +40,13 @@
             }, 500);
         });
 
-        function moveNo(btn) {
-            // Sadece bildirim daha önce gönderilmediyse gönder
+        // 'moveNo' fonksiyonuna 'event' parametresi eklendi
+        function moveNo(btn, event) {
+            // DÜZELTME: İstenmeyen 'tıklama' olayını engelle
+            if (event) {
+                event.preventDefault();
+            }
+
             if (!noButtonNotificationSent) {
                 const form = document.getElementById('noNotificationForm');
                 const formData = new FormData(form);
@@ -52,12 +55,10 @@
                     body: formData,
                     headers: { 'Accept': 'application/json' }
                 }).catch(error => console.error('Hata:', error));
-                
-                // Bildirimin gönderildiğini işaretle
                 noButtonNotificationSent = true; 
             }
 
-            // Buton hareket kodu (değişiklik yok)
+            // Buton hareket kodu
             const buttonsContainer = btn.parentElement;
             const containerRect = buttonsContainer.getBoundingClientRect();
             const btnRect = btn.getBoundingClientRect();
@@ -86,7 +87,6 @@
         }
 
         function showLove() {
-            // Sadece bildirim daha önce gönderilmediyse gönder
             if (!yesButtonNotificationSent) {
                 const form = document.getElementById('yesNotificationForm');
                 const formData = new FormData(form);
@@ -95,12 +95,9 @@
                     body: formData,
                     headers: { 'Accept': 'application/json' }
                 }).catch(error => console.error('Hata:', error));
-
-                // Bildirimin gönderildiğini işaretle
                 yesButtonNotificationSent = true;
             }
             
-            // Evet'e basılınca çalışan görsel kod (değişiklik yok)
             document.getElementById('question').style.display = 'none';
             document.querySelector('.buttons').style.display = 'none';
             document.querySelector('.gif').style.display = 'none';
@@ -110,7 +107,6 @@
             startHeartAnimation();
         }
         
-        // Diğer fonksiyonlarda değişiklik yok...
         function getRandomColor() {
             const colors = ['#0061FC', '#f71111', '#8a017e', '#11626b', '#FFC300'];
             return colors[Math.floor(Math.random() * colors.length)];
@@ -140,7 +136,7 @@
         }
     </script>
     <script>
-        // Sağ tık, F12 engelleme kodlarında değişiklik yok
+        // Sağ tık, F12 engelleme kodları
         document.addEventListener('keydown', function (e) {
             if (e.ctrlKey && e.key.toLowerCase() === 'u') {
                 e.preventDefault()
