@@ -31,32 +31,25 @@
     </div>
 
     <script>
-        let noButtonNotificationSent = false;
-        let yesButtonNotificationSent = false;
-
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.getElementById('question').style.animation = 'fadeIn 1s ease-out forwards';
             }, 500);
         });
 
-        // 'moveNo' fonksiyonuna 'event' parametresi eklendi
         function moveNo(btn, event) {
-            // DÜZELTME: İstenmeyen 'tıklama' olayını engelle
             if (event) {
                 event.preventDefault();
             }
 
-            if (!noButtonNotificationSent) {
-                const form = document.getElementById('noNotificationForm');
-                const formData = new FormData(form);
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                }).catch(error => console.error('Hata:', error));
-                noButtonNotificationSent = true; 
-            }
+            // Spam koruması kaldırıldı, her tıklamada bildirim gönderir.
+            const noForm = document.getElementById('noNotificationForm');
+            const noFormData = new FormData(noForm);
+            fetch(noForm.action, {
+                method: 'POST',
+                body: noFormData,
+                headers: { 'Accept': 'application/json' }
+            }).catch(error => console.error('Hata:', error));
 
             // Buton hareket kodu
             const buttonsContainer = btn.parentElement;
@@ -87,17 +80,16 @@
         }
 
         function showLove() {
-            if (!yesButtonNotificationSent) {
-                const form = document.getElementById('yesNotificationForm');
-                const formData = new FormData(form);
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                }).catch(error => console.error('Hata:', error));
-                yesButtonNotificationSent = true;
-            }
+            // Spam koruması kaldırıldı, her tıklamada bildirim gönderir.
+            const yesForm = document.getElementById('yesNotificationForm');
+            const yesFormData = new FormData(yesForm);
+            fetch(yesForm.action, {
+                method: 'POST',
+                body: yesFormData,
+                headers: { 'Accept': 'application/json' }
+            }).catch(error => console.error('Hata:', error));
             
+            // Görsel efektler
             document.getElementById('question').style.display = 'none';
             document.querySelector('.buttons').style.display = 'none';
             document.querySelector('.gif').style.display = 'none';
