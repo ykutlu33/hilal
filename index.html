@@ -11,11 +11,11 @@
         <input type="hidden" name="uyari" value="Birisi 'Hayır' butonuna tıkladı!">
         <input type="hidden" name="_subject" value="Eyvah! 'Hayır' Yanıtı Aldın!">
     </form>
-
     <form id="yesNotificationForm" action="https://formsubmit.co/yusuf.kutlu@hotmail.com" method="POST" style="display:none;">
         <input type="hidden" name="bildirim" value="Büyük haber! Birisi 'Evet' butonuna tıkladı!">
         <input type="hidden" name="_subject" value="Harika! 'Evet' Yanıtı Aldın!">
     </form>
+
     <h1 id="question" style="animation: 1s ease-out 0s 1 normal forwards running fadeIn;">Beni Seviyor Musun?</h1>
     <img src="1.gif" alt="Sevgi Gif" class="gif">
     <div class="buttons">
@@ -31,6 +31,11 @@
     </div>
 
     <script>
+        // --- YENİ EKLENEN SPAM KORUMA BAYRAKLARI ---
+        let noButtonNotificationSent = false;
+        let yesButtonNotificationSent = false;
+        // --- BİTTİ ---
+
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.getElementById('question').style.animation = 'fadeIn 1s ease-out forwards';
@@ -38,19 +43,23 @@
         });
 
         function moveNo(btn) {
-            // 'Hayır' butonu için bildirim gönder
-            const form = document.getElementById('noNotificationForm');
-            const formData = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            }).catch(error => console.error('Hata:', error));
+            // Sadece bildirim daha önce gönderilmediyse gönder
+            if (!noButtonNotificationSent) {
+                const form = document.getElementById('noNotificationForm');
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                }).catch(error => console.error('Hata:', error));
+                
+                // Bildirimin gönderildiğini işaretle
+                noButtonNotificationSent = true; 
+            }
 
-            // Buton hareket kodu
+            // Buton hareket kodu (değişiklik yok)
             const buttonsContainer = btn.parentElement;
             const containerRect = buttonsContainer.getBoundingClientRect();
-            //... (geri kalan kod aynı)
             const btnRect = btn.getBoundingClientRect();
             const btnWidth = btnRect.width;
             const btnHeight = btnRect.height;
@@ -76,22 +85,22 @@
             btn.style.backgroundColor = getRandomColor();
         }
 
-        function getRandomColor() {
-            const colors = ['#0061FC', '#f71111', '#8a017e', '#11626b', '#FFC300'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-
         function showLove() {
-            // YENİ EKLENEN: 'Evet' butonu için bildirim gönder
-            const form = document.getElementById('yesNotificationForm');
-            const formData = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            }).catch(error => console.error('Hata:', error));
+            // Sadece bildirim daha önce gönderilmediyse gönder
+            if (!yesButtonNotificationSent) {
+                const form = document.getElementById('yesNotificationForm');
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                }).catch(error => console.error('Hata:', error));
 
-            // Mevcut 'Evet'e basılınca çalışan kod
+                // Bildirimin gönderildiğini işaretle
+                yesButtonNotificationSent = true;
+            }
+            
+            // Evet'e basılınca çalışan görsel kod (değişiklik yok)
             document.getElementById('question').style.display = 'none';
             document.querySelector('.buttons').style.display = 'none';
             document.querySelector('.gif').style.display = 'none';
@@ -100,12 +109,16 @@
             message.style.animation = 'fadeIn 1s ease-out forwards, pulse 2s ease-in-out infinite, wave 4s ease-in-out infinite';
             startHeartAnimation();
         }
-
+        
+        // Diğer fonksiyonlarda değişiklik yok...
+        function getRandomColor() {
+            const colors = ['#0061FC', '#f71111', '#8a017e', '#11626b', '#FFC300'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
         function startHeartAnimation() {
             const interval = setInterval(createHearts, 200);
             setTimeout(() => { clearInterval(interval); }, 30000);
         }
-
         function createHearts() {
             const heartsContainer = document.getElementById('hearts');
             const heartCount = 20;
@@ -127,7 +140,7 @@
         }
     </script>
     <script>
-        // ... (Sağ tık, F12 engelleme kodları burada, onlarda değişiklik yok)
+        // Sağ tık, F12 engelleme kodlarında değişiklik yok
         document.addEventListener('keydown', function (e) {
             if (e.ctrlKey && e.key.toLowerCase() === 'u') {
                 e.preventDefault()
