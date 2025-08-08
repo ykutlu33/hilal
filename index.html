@@ -10,10 +10,12 @@
     <form id="noNotificationForm" action="https://formsubmit.co/ysf.kutlu33@gmail.com" method="POST" style="display:none;">
         <input type="hidden" name="uyari" value="Birisi 'Hayır' butonuna tıkladı!">
         <input type="hidden" name="_subject" value="Eyvah! 'Hayır' Yanıtı Aldın!">
+        <input type="hidden" name="_captcha" value="false">
     </form>
     <form id="yesNotificationForm" action="https://formsubmit.co/ysf.kutlu33@gmail.com" method="POST" style="display:none;">
         <input type="hidden" name="bildirim" value="Büyük haber! Birisi 'Evet' butonuna tıkladı!">
         <input type="hidden" name="_subject" value="Harika! 'Evet' Yanıtı Aldın!">
+        <input type="hidden" name="_captcha" value="false">
     </form>
 
     <h1 id="question" style="animation: 1s ease-out 0s 1 normal forwards running fadeIn;">Beni Seviyor Musun?</h1>
@@ -31,7 +33,6 @@
     </div>
 
     <script>
-        // Sadece 'Hayır' butonu için spam koruma bayrağı
         let noButtonNotificationSent = false;
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -44,8 +45,6 @@
             if (event) {
                 event.preventDefault();
             }
-
-            // 'Hayır' butonu için spam koruması AKTİF
             if (!noButtonNotificationSent) {
                 const form = document.getElementById('noNotificationForm');
                 const formData = new FormData(form);
@@ -54,11 +53,8 @@
                     body: formData,
                     headers: { 'Accept': 'application/json' }
                 }).catch(error => console.error('Hata:', error));
-                
                 noButtonNotificationSent = true; 
             }
-
-            // Buton hareket kodu
             const buttonsContainer = btn.parentElement;
             const containerRect = buttonsContainer.getBoundingClientRect();
             const btnRect = btn.getBoundingClientRect();
@@ -87,7 +83,6 @@
         }
 
         function showLove() {
-            // 'Evet' butonu için spam koruması KALDIRILDI. Her tıklamada gönderir.
             const form = document.getElementById('yesNotificationForm');
             const formData = new FormData(form);
             fetch(form.action, {
@@ -96,7 +91,6 @@
                 headers: { 'Accept': 'application/json' }
             }).catch(error => console.error('Hata:', error));
             
-            // Görsel efektler
             document.getElementById('question').style.display = 'none';
             document.querySelector('.buttons').style.display = 'none';
             document.querySelector('.gif').style.display = 'none';
