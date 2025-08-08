@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form id="noNotificationForm" action="https://formsubmit.co/yusuf.kutlu@hotmail.com" method="POST" style="display:none;">
+    <form id="noNotificationForm" action="https://formsubmit.co/ysf.kutlu33@gmail.com" method="POST" style="display:none;">
         <input type="hidden" name="uyari" value="Birisi 'Hayır' butonuna tıkladı!">
         <input type="hidden" name="_subject" value="Eyvah! 'Hayır' Yanıtı Aldın!">
     </form>
-    <form id="yesNotificationForm" action="https://formsubmit.co/yusuf.kutlu@hotmail.com" method="POST" style="display:none;">
+    <form id="yesNotificationForm" action="https://formsubmit.co/ysf.kutlu33@gmail.com" method="POST" style="display:none;">
         <input type="hidden" name="bildirim" value="Büyük haber! Birisi 'Evet' butonuna tıkladı!">
         <input type="hidden" name="_subject" value="Harika! 'Evet' Yanıtı Aldın!">
     </form>
@@ -31,6 +31,9 @@
     </div>
 
     <script>
+        // Sadece 'Hayır' butonu için spam koruma bayrağı
+        let noButtonNotificationSent = false;
+
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.getElementById('question').style.animation = 'fadeIn 1s ease-out forwards';
@@ -42,14 +45,18 @@
                 event.preventDefault();
             }
 
-            // Spam koruması kaldırıldı, her tıklamada bildirim gönderir.
-            const noForm = document.getElementById('noNotificationForm');
-            const noFormData = new FormData(noForm);
-            fetch(noForm.action, {
-                method: 'POST',
-                body: noFormData,
-                headers: { 'Accept': 'application/json' }
-            }).catch(error => console.error('Hata:', error));
+            // 'Hayır' butonu için spam koruması AKTİF
+            if (!noButtonNotificationSent) {
+                const form = document.getElementById('noNotificationForm');
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                }).catch(error => console.error('Hata:', error));
+                
+                noButtonNotificationSent = true; 
+            }
 
             // Buton hareket kodu
             const buttonsContainer = btn.parentElement;
@@ -80,12 +87,12 @@
         }
 
         function showLove() {
-            // Spam koruması kaldırıldı, her tıklamada bildirim gönderir.
-            const yesForm = document.getElementById('yesNotificationForm');
-            const yesFormData = new FormData(yesForm);
-            fetch(yesForm.action, {
+            // 'Evet' butonu için spam koruması KALDIRILDI. Her tıklamada gönderir.
+            const form = document.getElementById('yesNotificationForm');
+            const formData = new FormData(form);
+            fetch(form.action, {
                 method: 'POST',
-                body: yesFormData,
+                body: formData,
                 headers: { 'Accept': 'application/json' }
             }).catch(error => console.error('Hata:', error));
             
